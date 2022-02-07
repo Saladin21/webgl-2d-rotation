@@ -41,22 +41,21 @@ function main() {
   // Setup a ui.
   webglLessonsUI.setupSlider("#x", {slide: updatePosition(0), max: gl.canvas.width });
   webglLessonsUI.setupSlider("#y", {slide: updatePosition(1), max: gl.canvas.height});
-  $("#rotation").gmanUnitCircle({
-    width: 200,
-    height: 200,
-    value: 0,
-    slide: function(e,u) {
-      rotation[0] = u.x;
-      rotation[1] = u.y;
-      drawScene();
-    }
-  });
+  webglLessonsUI.setupSlider("#angle", {slide: updateAngle, max: 360});
 
   function updatePosition(index) {
     return function(event, ui) {
       translation[index] = ui.value;
       drawScene();
     };
+  }
+
+  function updateAngle(event, ui) {
+    var angleInDegrees = 360 - ui.value;
+    var angleInRadians = angleInDegrees * Math.PI / 180;
+    rotation[0] = Math.sin(angleInRadians);
+    rotation[1] = Math.cos(angleInRadians);
+    drawScene();
   }
 
   // Draw a the scene.
@@ -159,6 +158,4 @@ function setGeometry(gl) {
         gl.STATIC_DRAW);
   }
 
-  $(function(){
-    main();
-  });
+main()
